@@ -42,6 +42,7 @@ def get_significance(
     risk_col: str = "Ad_risk",
     exclude_one: bool = True,
     n_iter: int = 500,
+    order: str = "Hit fraction",
 ) -> Tuple[np.ndarray, np.ndarray]:
     rdn_scores = []
     higher = []
@@ -72,6 +73,7 @@ def get_significance(
         hit_fraction.name = "Hit fraction"
 
         heatmap_df = pd.concat([test_z_score, clin[risk_col], hit_fraction], axis=1)
+        heatmap_df = order_heatmap(heatmap_df=heatmap_df)
 
         if nadj:
             red_df = heatmap_df[heatmap_df[risk_col].isin([0, 1])]
@@ -87,7 +89,7 @@ def get_significance(
 
         rdn_scores.append(
             roc_auc_score(
-                y_true=red_df[risk_col].ravel(), y_score=red_df["Hit fraction"].ravel()
+                y_true=red_df[risk_col].ravel(), y_score=red_df[order].ravel()
             )
         )
         if rdn_scores[-1] > ref:
@@ -103,14 +105,10 @@ def estimate_median_mad(
     selcpgs: np.ndarray,
     make_balanced: bool = False,
 ) -> Tuple[pd.Series, pd.Series]:
-    ad_cases = np.where(phenotypes == 1)[0]
     nad_cases = np.where(phenotypes == 0)[0]
 
     if make_balanced:
-        n_ad = len(ad_cases)
-        pats = ad_cases
-        rdn_sel = np.random.choice(nad_cases, size=n_ad, replace=False)
-        pats = np.concatenate([pats, rdn_sel])
+        pats = nad_cases
         df = EPIC_m.iloc[pats]
     else:
         df = EPIC_m
@@ -120,6 +118,19 @@ def estimate_median_mad(
     mad = pd.Series(mad, index=df.columns.intersection(selcpgs))
 
     return median, mad
+
+
+def order_heatmap(heatmap_df: pd.DataFrame) -> pd.DataFrame:
+    heatmap_df = heatmap_df.sort_values(by="Hit fraction")
+    heatmap_df["Order"] = np.arange(heatmap_df.shape[0])
+
+    heatmap_df["Mean meth score"] = (
+        heatmap_df.loc[:, heatmap_df.columns.str.startswith("cg")].abs().mean(axis=1)
+    )
+    heatmap_df = heatmap_df.sort_values(by=["Hit fraction", "Mean meth score"])
+    heatmap_df["Mixed Order"] = np.arange(heatmap_df.shape[0])
+
+    return heatmap_df
 
 
 def get_heatmap_df(
@@ -149,15 +160,19 @@ def get_heatmap_df(
         axis=1,
     )
     heatmap_df["Ad_plot"] = heatmap_df["Ad"].replace({0: "No", 1: "Yes"})
-    heatmap_df = heatmap_df.sort_values(by="Hit fraction")
-    heatmap_df["Order"] = np.arange(heatmap_df.shape[0])
+    heatmap_df = order_heatmap(heatmap_df=heatmap_df)
 
     return heatmap_df, hit_fraction
 
 
 def get_polyp_size_nr_link(
-    EPIC_clin: pd.DataFrame, heatmap_df: pd.DataFrame
+    EPIC_clin: pd.DataFrame,
+    heatmap_df: pd.DataFrame,
+    subset_pat: Optional[np.ndarray] = None,
 ) -> pd.DataFrame:
+    if subset_pat is not None:
+        EPIC_clin = EPIC_clin.loc[subset_pat]
+
     EPIC_clin["polyps_total_nr"] = EPIC_clin["polyps_total_nr"].replace({" ": 0})
     EPIC_clin["polyps_total_size"] = EPIC_clin["polyps_total_size"].replace({" ": 0})
 
@@ -166,7 +181,7 @@ def get_polyp_size_nr_link(
     ].astype(float)
 
     heatmap_df = heatmap_df.copy()
-    heatmap_df = pd.concat([heatmap_df, polyp_info], axis=1)
+    heatmap_df = pd.concat([heatmap_df, polyp_info], axis=1).dropna()
     heatmap_df["Polyp Nr Right"] = heatmap_df["polyps_right_nr"].apply(
         lambda x: str(int(x)) if x < 2 else ">=2"
     )

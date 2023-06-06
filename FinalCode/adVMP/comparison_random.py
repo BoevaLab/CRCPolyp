@@ -11,6 +11,7 @@ from typing import Tuple, Optional, Dict
 
 from utils.plotting import transform_plot_ax
 from .adVMP_crossval import format_p
+from .adVMP_discovery import order_heatmap
 
 
 def get_significance(
@@ -23,6 +24,7 @@ def get_significance(
     risk_col: str = "Ad_risk",
     exclude_one: bool = True,
     n_iter: int = 500,
+    order: str = "Hit fraction",
 ) -> Tuple[np.ndarray, np.ndarray]:
     rdn_scores = []
     higher = []
@@ -41,8 +43,14 @@ def get_significance(
             )
         selcpgs = rdn_cpgs
 
-        median_test = data.loc[:, data.columns.intersection(selcpgs)].median()
-        mad_test = median_abs_deviation(data.loc[:, data.columns.intersection(selcpgs)])
+        healthy_pat = clin[risk_col] == 0
+
+        # median_test = data.loc[:, data.columns.intersection(selcpgs)].median()
+        median_test = data.loc[healthy_pat, data.columns.intersection(selcpgs)].median()
+        # mad_test = median_abs_deviation(data.loc[:, data.columns.intersection(selcpgs)])
+        mad_test = median_abs_deviation(
+            data.loc[healthy_pat, data.columns.intersection(selcpgs)]
+        )
         mad_test = pd.Series(mad_test, index=data.columns.intersection(selcpgs))
 
         test_z_score = data[data.columns.intersection(selcpgs)]
@@ -53,6 +61,8 @@ def get_significance(
         hit_fraction.name = "Hit fraction"
 
         heatmap_df = pd.concat([test_z_score, clin[risk_col], hit_fraction], axis=1)
+
+        heatmap_df = order_heatmap(heatmap_df=heatmap_df)
 
         if nadj:
             red_df = heatmap_df[heatmap_df[risk_col].isin([0, 1])]
@@ -68,7 +78,7 @@ def get_significance(
 
         rdn_scores.append(
             roc_auc_score(
-                y_true=red_df[risk_col].ravel(), y_score=red_df["Hit fraction"].ravel()
+                y_true=red_df[risk_col].ravel(), y_score=red_df[order].ravel()
             )
         )
 
@@ -89,6 +99,7 @@ def get_comparison_rdn_val(
     risk_col: str = "Ad_risk",
     exclude_one: bool = True,
     age_col: Optional[str] = "Age at visit",
+    order: str = "Hit fraction",
 ) -> None:
     avg_perf = get_significance(
         data=data,
@@ -100,6 +111,7 @@ def get_comparison_rdn_val(
         risk_col=risk_col,
         exclude_one=exclude_one,
         n_iter=n_iter,
+        order=order,
     )
     avg_perf_back = get_significance(
         data=data,
@@ -111,6 +123,7 @@ def get_comparison_rdn_val(
         risk_col=risk_col,
         exclude_one=exclude_one,
         n_iter=n_iter,
+        order=order,
     )
 
     pval_rdn = np.sum(ref < np.array(avg_perf)) / len(avg_perf)

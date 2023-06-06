@@ -4,7 +4,7 @@ import pathlib as pl
 import matplotlib.pyplot as plt
 import os
 
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Tuple
 from sklearn.metrics import RocCurveDisplay, PrecisionRecallDisplay
 from statannotations.Annotator import Annotator
 
@@ -29,6 +29,7 @@ def get_performance_plots(
     hue_order: Optional[List] = None,
     rocauc: bool = True,
     leg_title: str = "Adenoma",
+    order: str = "Mixed Order",
 ) -> None:
     os.makedirs(fig_dir, exist_ok=True)
     cols = heatmap_df.columns.str.startswith("cg") + heatmap_df.columns.str.startswith(
@@ -51,7 +52,7 @@ def get_performance_plots(
     fig, ax = plt.subplots(1, 1, figsize=(3 * figsize, figsize))
     sns.scatterplot(
         data=heatmap_df,
-        x="Order",
+        x=order,
         y="Hit fraction",
         hue=hue_worm,
         hue_order=hue_order,
@@ -64,7 +65,7 @@ def get_performance_plots(
         fig, ax = plt.subplots(1, 1, figsize=(figsize, figsize))
         RocCurveDisplay.from_predictions(
             heatmap_df["Ad"].astype(int).ravel(),
-            heatmap_df["Hit fraction"].ravel(),
+            heatmap_df[order].ravel(),
             ax=ax,
             c="black",
         )
@@ -79,7 +80,7 @@ def get_performance_plots(
         fig, ax = plt.subplots(1, 1, figsize=(figsize, figsize))
         PrecisionRecallDisplay.from_predictions(
             heatmap_df["Ad"].astype(int).ravel(),
-            heatmap_df["Hit fraction"].ravel(),
+            heatmap_df[order].ravel(),
             ax=ax,
             c="black",
         )
@@ -127,8 +128,9 @@ def plot_polyp_size_nr_link(
     palette_nr: Dict,
     ftsize: int = 10,
     leg_ftsize: int = 10,
+    figsize: Tuple[int, int] = (5, 5),
 ) -> pd.DataFrame:
-    fig, ax = plt.subplots(1, 1)
+    fig, ax = plt.subplots(1, 1, figsize=figsize)
     sns.boxplot(
         data=heatmap_df,
         x="Polyp Size cat",
@@ -148,6 +150,7 @@ def plot_polyp_size_nr_link(
     annot.configure(
         test="Mann-Whitney",
         loc="inside",
+        text_format="simple",
         show_test_name=False,
         verbose=2,
         comparisons_correction=None,
@@ -170,7 +173,7 @@ def plot_polyp_size_nr_link(
     transform_plot_ax(ax, legend_title="", ftsize=ftsize, leg_ftsize=leg_ftsize)
     fig.savefig(fig_dir / "polyp_size_hit_fraction.svg", bbox_inches="tight")
 
-    fig, ax = plt.subplots(1, 1)
+    fig, ax = plt.subplots(1, 1, figsize=figsize)
     sns.boxplot(
         data=heatmap_df,
         x="Polyp Nr Right",
@@ -194,6 +197,7 @@ def plot_polyp_size_nr_link(
     annot.configure(
         test="Mann-Whitney",
         loc="inside",
+        text_format="simple",
         show_test_name=False,
         verbose=2,
         comparisons_correction=None,
@@ -208,7 +212,7 @@ def plot_polyp_size_nr_link(
     transform_plot_ax(ax, legend_title="", ftsize=ftsize, leg_ftsize=leg_ftsize)
     fig.savefig(fig_dir / "polyp_nr_right_hit_fraction.svg", bbox_inches="tight")
 
-    fig, ax = plt.subplots(1, 1)
+    fig, ax = plt.subplots(1, 1, figsize=figsize)
     sns.boxplot(
         data=heatmap_df,
         x="Polyp Nr Total",
@@ -233,6 +237,7 @@ def plot_polyp_size_nr_link(
         test="Mann-Whitney",
         loc="inside",
         show_test_name=False,
+        text_format="simple",
         verbose=2,
         comparisons_correction=None,
         fontsize=ftsize,

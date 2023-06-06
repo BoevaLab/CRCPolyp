@@ -12,7 +12,7 @@ from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import average_precision_score, roc_auc_score
 from scipy.stats import median_abs_deviation
 
-from .adVMP_discovery import get_hyper_vDMC
+from adVMP.adVMP_discovery import get_hyper_vDMC, order_heatmap, estimate_median_mad
 from utils.plotting import transform_plot_ax
 
 
@@ -48,13 +48,14 @@ def get_stratified_hyper_DMC(
 def get_fold_specific_ensembling_cpgs(
     test_results: Dict[str, pd.DataFrame],
     noens: bool = False,
+    limq: float = 0.001,
 ) -> Dict[str, np.ndarray]:
     sel_probes = {}
     for ds in test_results:
         sel_probes[ds] = defaultdict(list)
         for i, fold in enumerate(test_results[ds]):
             df = test_results[ds][fold]
-            sign = df[(df["q"] < 0.001) & (df["ttest_p"] < 0.05) & (df.diffV > 0)]
+            sign = df[(df["q"] < limq) & (df["ttest_p"] < 0.05) & (df.diffV > 0)]
             sel_probes[ds][fold].append(sign.index)
     if noens:
         sel_probes = {ds: dict(sel_probes[ds]) for ds in sel_probes}
@@ -86,14 +87,14 @@ def get_fold_specific_ensembling_cpgs(
 def get_hit_fraction(
     EPIC_m: pd.DataFrame,
     selcpgs: np.ndarray,
+    phenotypes: np.ndarray,
     median: Optional[float] = None,
     mad: Optional[float] = None,
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
-    if median is None:
-        median = EPIC_m[EPIC_m.columns.intersection(selcpgs)].median()
-    if mad is None:
-        mad = median_abs_deviation(EPIC_m[EPIC_m.columns.intersection(selcpgs)])
-        mad = pd.Series(mad, index=EPIC_m.columns.intersection(selcpgs))
+    if (median is None) and (mad is None):
+        median, mad = estimate_median_mad(
+            EPIC_m=EPIC_m, phenotypes=phenotypes, selcpgs=selcpgs, make_balanced=True
+        )
 
     EPIC_z_score = EPIC_m[EPIC_m.columns.intersection(selcpgs)]
     EPIC_z_score = (EPIC_z_score - median) / mad
@@ -111,20 +112,29 @@ def get_fold_results(
     selcpgs: np.ndarray,
     y: pd.DataFrame,
     estimate_copa: bool = True,
+    order: str = "Hit fraction",
 ) -> Tuple[pd.DataFrame, pd.DataFrame, np.ndarray]:
     EPIC_train, EPIC_test = EPIC_m.iloc[train_idx], EPIC_m.iloc[test_idx]
     EPIC_y_train, EPIC_y_test = y[train_idx], y[test_idx]
 
     EPIC_z_score_train, hit_fraction_train, median, mad = get_hit_fraction(
-        EPIC_m=EPIC_train, selcpgs=selcpgs
+        EPIC_m=EPIC_train,
+        selcpgs=selcpgs,
+        phenotypes=EPIC_y_train,
     )
     if estimate_copa:
         EPIC_z_score_test, hit_fraction_test, _, _ = get_hit_fraction(
-            EPIC_m=EPIC_test, selcpgs=selcpgs, median=median, mad=mad
+            EPIC_m=EPIC_test,
+            selcpgs=selcpgs,
+            median=median,
+            mad=mad,
+            phenotypes=EPIC_y_test,
         )
     else:
         EPIC_z_score_test, hit_fraction_test, _, _ = get_hit_fraction(
-            EPIC_m=EPIC_test, selcpgs=selcpgs
+            EPIC_m=EPIC_test,
+            selcpgs=selcpgs,
+            phenotypes=EPIC_y_test,
         )
 
     heatmap_df_train = pd.concat(
@@ -145,21 +155,24 @@ def get_fold_results(
         axis=1,
     )
 
+    heatmap_df_train = order_heatmap(heatmap_df=heatmap_df_train)
+    heatmap_df_test = order_heatmap(heatmap_df=heatmap_df_test)
+
     roctrain = roc_auc_score(
         y_true=heatmap_df_train["Ad"].astype(int).ravel(),
-        y_score=heatmap_df_train["Hit fraction"].ravel(),
+        y_score=heatmap_df_train[order].ravel(),
     )
     roctest = roc_auc_score(
         y_true=heatmap_df_test["Ad"].astype(int).ravel(),
-        y_score=heatmap_df_test["Hit fraction"].ravel(),
+        y_score=heatmap_df_test[order].ravel(),
     )
     auprctrain = average_precision_score(
         y_true=heatmap_df_train["Ad"].astype(int).ravel(),
-        y_score=heatmap_df_train["Hit fraction"].ravel(),
+        y_score=heatmap_df_train[order].ravel(),
     )
     auprctest = average_precision_score(
         y_true=heatmap_df_test["Ad"].astype(int).ravel(),
-        y_score=heatmap_df_test["Hit fraction"].ravel(),
+        y_score=heatmap_df_test[order].ravel(),
     )
 
     return (
@@ -175,6 +188,7 @@ def get_crossval_performance(
     union_cpgs_fold_spec: Dict,
     EPIC_phenotypes: np.ndarray,
     estimate_copa: bool = True,
+    order: str = "Hit fraction",
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     all_stats = []
     crossval_hit_fraction = []
@@ -202,10 +216,13 @@ def get_crossval_performance(
             selcpgs=union_cpgs_fold_spec[fold.stem],
             y=EPIC_phenotypes.astype(int),
             estimate_copa=estimate_copa,
+            order=order,
         )
         all_stats.append(stats)
 
-        crossval_hit_fraction.append(heatmap_df_test[["Ad", "Hit fraction"]])
+        crossval_hit_fraction.append(
+            heatmap_df_test[["Ad", "Hit fraction", "Mean meth score"]]
+        )
 
     all_stats = pd.DataFrame(
         all_stats,
@@ -220,8 +237,14 @@ def get_crossval_performance(
     crossval_hit_fraction["Ad_plot"] = crossval_hit_fraction["Ad"].replace(
         {0: "No", 1: "Yes"}
     )
+
     crossval_hit_fraction = crossval_hit_fraction.sort_values(by="Hit fraction")
     crossval_hit_fraction["Order"] = np.arange(crossval_hit_fraction.shape[0])
+
+    crossval_hit_fraction = crossval_hit_fraction.sort_values(
+        by=["Hit fraction", "Mean meth score"]
+    )
+    crossval_hit_fraction["Mixed Order"] = np.arange(crossval_hit_fraction.shape[0])
 
     return all_stats, crossval_hit_fraction
 
@@ -271,6 +294,7 @@ def get_crossval_performance_rdn(
     union_cpgs_fold_spec: Dict,
     EPIC_phenotypes: np.ndarray,
     estimate_copa: bool = True,
+    order: str = "Hit fraction",
 ) -> Tuple[pd.DataFrame, pd.DataFrame]:
     all_stats = []
     for fold in ds_dir.iterdir():
@@ -297,6 +321,7 @@ def get_crossval_performance_rdn(
             selcpgs=union_cpgs_fold_spec[fold.stem],
             y=EPIC_phenotypes.astype(int),
             estimate_copa=estimate_copa,
+            order=order,
         )
         all_stats.append(stats)
 
@@ -328,6 +353,7 @@ def get_comparison_rdn(
     data: pd.DataFrame,
     clin: pd.DataFrame,
     n_iter: int = 100,
+    order: str = "Hit fraction",
 ) -> None:
     rdn_cpgs = get_rdn_cpgs(
         union_cpgs_fold_spec=union_cpgs_fold_spec, data=data, n_iter=n_iter
@@ -346,6 +372,7 @@ def get_comparison_rdn(
             union_cpgs_fold_spec=rdn_cpgs[i],
             EPIC_phenotypes=phenotypes,
             estimate_copa=True,
+            order=order,
         )
         avg_perf.append(score)
 
@@ -357,6 +384,7 @@ def get_comparison_rdn(
             union_cpgs_fold_spec=rdn_cpgs_bck[i],
             EPIC_phenotypes=phenotypes,
             estimate_copa=True,
+            order=order,
         )
         avg_perf_back.append(score)
 
