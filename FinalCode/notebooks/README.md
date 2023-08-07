@@ -48,10 +48,10 @@ This notebook runs the analysis to reproduce Fig 1, Suppl. Table S1 and Fig S1.
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
 
 #### 2. `adVMP-DMR.ipynb`
 
@@ -59,11 +59,11 @@ This notebook computes the comparison between differential methylation and diffe
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
-> result_dir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved. 
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- result_dir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved. 
 
 #### 3. `adVMPDeconvLink.ipynb`
 
@@ -73,10 +73,10 @@ This notebook uses the EpiSCORE algorithm to get an estimate of the tissue compo
 
 ##### Placeholders
 
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
-> mapping_path = pl.Path("add/path/here/"); the folder where the sample sheet (of resp. SWPEPIC1/2 or SWEPIC3) is stored.
-> base_dir = pl.Path("add/path/here/sesame_processed_EPIC"); the folder where the processed DNAmeth data for SWEPIC1/2 or SWEPIC3 (see 0. Download the data) is stored.
-> resdir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- mapping_path = pl.Path("add/path/here/"); the folder where the sample sheet (of resp. SWPEPIC1/2 or SWEPIC3) is stored.
+- base_dir = pl.Path("add/path/here/sesame_processed_EPIC"); the folder where the processed DNAmeth data for SWEPIC1/2 or SWEPIC3 (see 0. Download the data) is stored.
+- resdir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved.
 
 #### 4. `adVMPDiscovery.ipynb`
 
@@ -84,12 +84,12 @@ This notebook computes the aDVMCs in the full cohorts and the results for Fig 2a
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
-> result_dir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved. 
-> deconv_path  = pl.Path("/add/path/here/"); the folder where the results of step 3, the deconvolution results, are stored
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- result_dir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved. 
+- deconv_path  = pl.Path("/add/path/here/"); the folder where the results of step 3, the deconvolution results, are stored
 
 #### 5. `adVMP-GlobalVsLocal.ipynb`
 
@@ -97,10 +97,10 @@ This notebook computes most variable probes in healthy tissue, results used in S
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
 
 #### 5bis. (Optional) `HorvathClockComparison.ipynb`
 
@@ -113,10 +113,10 @@ This notebook computes the Horvath clock age for each patient to be used in Supp
 
 ##### Placeholders
 
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
-> PATH1 = "/add/path/here"; the folder where the raw data for SWEPIC1/2 is stored.
-> PATH2 = "/add/path/here"; the folder where the raw data for SWEPIC3 is stored.
-> sheet_dir = pl.Path("/add/path/here/"); the folder where the sample sheets are stored 
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- PATH1 = "/add/path/here"; the folder where the raw data for SWEPIC1/2 is stored.
+- PATH2 = "/add/path/here"; the folder where the raw data for SWEPIC3 is stored.
+- sheet_dir = pl.Path("/add/path/here/"); the folder where the sample sheets are stored 
 
 #### 6. `adVMPCrossVal.ipynb`
 
@@ -124,10 +124,10 @@ This notebook computes the cross-validated analysis on aDVMCs and results for Fi
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
 
 #### 7. `adVMPExternalValidation.ipynb`
 
@@ -135,11 +135,11 @@ This notebook computes the analysis of aDVMC and the performance of aDVMC-based 
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
-> data_dir_GSE199057 = pl.Path("/add/path/here/"); the folder where the results of methylprep (see 0. Download the data) for GSE199057 is stored.
-> data_dir_GSE132804 = pl.Path("/add/path/here/"); the folder where the results of methylprep (see 0. Download the data) for GSE132804 is stored.
-> data_dir_GSE48684 = pl.Path("/add/path/here/"); the folder where the results of methylprep (see 0. Download the data) for GSE48684 is stored.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- data_dir_GSE199057 = pl.Path("/add/path/here/"); the folder where the results of methylprep (see 0. Download the data) for GSE199057 is stored.
+- data_dir_GSE132804 = pl.Path("/add/path/here/"); the folder where the results of methylprep (see 0. Download the data) for GSE132804 is stored.
+- data_dir_GSE48684 = pl.Path("/add/path/here/"); the folder where the results of methylprep (see 0. Download the data) for GSE48684 is stored.
 
 #### 8. `adVMPEnrichmentRoadmaps.ipynb`
 
@@ -147,10 +147,10 @@ This notebook computes the enrichment of aDVMC in the [Roadmap Epigenomics Conso
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
 
 #### 9. `adVMPWholeCGIMeth.ipynb`
 
@@ -158,10 +158,10 @@ This notebook computes the analysis of the local vs regional dysregulation at aD
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
 
 #### 10. `adVMPClinicalLifestyleLink.ipynb`
 
@@ -169,10 +169,10 @@ This notebook computes the link between aDVMC methylation and clinical and lifes
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
 
 #### 11. `adVMPLinkGEX.ipynb`
 
@@ -180,9 +180,9 @@ This notebook computes the analysis of aDVMC-related genes in terms of gene expr
 
 ##### Placeholders
 
-> fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
-> base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-> base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
-> data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
-> gex_dir = pl.Path("/add/path/here"); the folder where the data from GSE76987 (see 0. Download the data) is stored.
-> resdir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved.
+- fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
+- base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
+- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
+- data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
+- gex_dir = pl.Path("/add/path/here"); the folder where the data from GSE76987 (see 0. Download the data) is stored.
+- resdir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved.

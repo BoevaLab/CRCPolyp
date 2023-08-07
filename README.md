@@ -21,7 +21,7 @@ This folder contains helper functions for plotting
 
 ##### notebooks
 
-This folder contains all notebooks necessary for reproducing the analysis as well as a detailed explanation of how to reproduce the figures and analysis presented in the manuscript.
+This folder contains all notebooks necessary for reproducing the analysis as well as a [detailed explanation](https://github.com/BoevaLab/CRCPolyp/blob/main/FinalCode/notebooks/README.md) of how to reproduce the figures and analysis presented in the manuscript.
 
 ## Questions
 
