@@ -1,6 +1,18 @@
 # CRCPolyp
 Supporting code for "DNA methylation variability in cecal mucosa of patients with tubular adenomas as a marker of early field cancerization"
 
+## Installing packages to reproduce analysis
+
+To reproduce the analysis, one needs to have the right packages installed. 
+An easy way to do so it through [conda](https://www.anaconda.com/). 
+With conda installed (see their website if not installed), just run 
+
+```
+conda create --name crcpolypenv --file requirements.txt
+```
+
+to create the env crcpolypenv that will contain all necessary packages to reproduce this analysis.
+
 ## Description
 
 ### FinalCode

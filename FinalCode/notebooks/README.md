@@ -1,6 +1,6 @@
 ## Description
 
-This folder contains the notebooks used for the analysis. 
+This folder contains the notebooks used for the analysis. This README will walk you through the different steps to reproduce the analysis, including links to download the data.
 
 ### How to reproduce the analysis
 
@@ -11,20 +11,50 @@ In general, placeholders in the notebooks are indicated with "/add/path/here". T
 #### General comments
 In the code in general, you will see the notation adVMP - this is equivalent to aDVMC. You will also see the notations EPIC2, EPIC3, EPIC4 - these are equivalent to SWEPIC1, SWEPIC2, SWEPIC3.
 
-#### 0. Clone the repository and download the data
+#### 0. Clone the repository and download/process the data
 
 First, clone this repository in a folder of your choice. Navigate to the notebooks folder to run the analyses.
 
 > **_NOTE_**: If you wish to run the notebooks from a separate folder, don't forget to change the sys.path to the folder containing the code (FinalCode/ folder) to be able to download the helper functions.
 
-##### In house data
-You can find the preprocessed data at XXXXX  (TODO)
-You can find the clinical and auxiliary data at XXXX (TODO). 
+#### In house data
+The data generated for this study can be found in two places. 
+The DNA methylation and RNA seq raw data (IDAT and FASTQ files) have been deposited in the EGA, accession number [XXXX] # TODO.
+The Zenodo repository contains all input files and intermediate files of
+the analysis, other than the DNA methylation data/RNAseq data, as well as a file describing the content of the files in detail.
 
-ADD IN THE GENE EXPRESSION
+Zenodo link: [XXXXX] # TODO
+EGA link: [XXXXX] # TODO
 
-##### External data
-For external methylation datasets, we use the [methylprep package](https://life-epigenetics-methylprep.readthedocs-hosted.com/en/latest/). 
+> **_NOTE_**: Data downloaded from the Zenodo link is then used as is using the `data_dir` argument in all notebooks. Keep the architecture of the directory intact to be able to run the notebooks without issues.
+
+
+##### How to process the data
+##### Methylation data
+After having downloaded the IDAT files from EGA, you can use the we use the [methylprep package](https://life-epigenetics-methylprep.readthedocs-hosted.com/en/latest/) to process the data.
+
+Install the package following the installation guide on their website, then run the following command,
+
+```
+python -m methylprep process -d {path/to/directory/with/IDAT/files} --minfi -s {path/to/sample/sheet} --batch_size 50 -a
+```
+
+This will process the IDAT files and create .pkl files associated with these files, that will be the input for the analysis.
+
+We processed the data separately for SWEPIC1/2 and SWEPIC3; you can however process the data together. The paths to the files (cf. placeholders described later) will simply be the same.
+
+
+##### RNA data
+After having downloaded the FASTQ files from EGA, you must run TRIMMOMATIC and SALMON to obtain the processed data. 
+
+Although you can do this whichever way you prefer, we used Snakemake wrappers to facilitate the analysis. 
+
+We have uploaded to this repository the Snakefile used to run the analysis. First, install Snakemake according to the [instructions in their documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). Wrappers must be downloaded from [The Snakemake Wrappers repository](https://snakemake-wrappers.readthedocs.io/en/stable/index.html). 
+
+Then, run snakemake in the folder that contains also the raw FASTQ files and the necessary Snakemake wrappers. You might have to adapt the file paths in the Snakefile we provided to match the names of your files. 
+
+#### External data
+For external methylation datasets, as for in-house data, we use the [methylprep package](https://life-epigenetics-methylprep.readthedocs-hosted.com/en/latest/). 
 
 Install the package following the installation guide on their website, then run the following command, replacing GEOID by the ID of the GEO database to download (i.e., GSE132804, GSE48684, GSE199057), and the path to where you want to save the data.
 
@@ -182,7 +212,6 @@ This notebook computes the analysis of aDVMC-related genes in terms of gene expr
 
 - fig_dir = pl.Path("/add/path/here/"); where the figures will be automatically saved
 - base_dir = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC1/2 (see 0. Download the data) is stored 
-- base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
 - data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
-- gex_dir = pl.Path("/add/path/here"); the folder where the data from GSE76987 (see 0. Download the data) is stored.
-- resdir = pl.Path("/add/path/here"); the folder where the results of the analysis will be saved.
+- gencode_path = pl.Path("/add/path/here/"); this is the gencode annotation, v37, that can be downloaded from [here](https://www.gencodegenes.org/human/release_44lift37.html)
+- processed_rna_path = pl.Path("/add/path/here/"); this is the path to the directory where the processed files from Salmon are saved after following instructions from 0. Clone the repository and download/process the data. 
