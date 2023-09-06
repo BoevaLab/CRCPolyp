@@ -17,7 +17,7 @@ to create the env crcpolypenv that will contain all necessary packages to reprod
 
 ### FinalCode
 
-For more details on folders, cf the respective READMEs.
+Each folder contains the code necessary to reproduce the analysis. In particular, the folder `notebooks` contains a [detailed explanation](https://github.com/BoevaLab/CRCPolyp/blob/main/FinalCode/notebooks/README.md) of how to reproduce the analysis, including links to download the data, how to process it, how to run the notebooks. For more details on folders, cf the respective READMEs.
 
 ##### aDVMC 
 

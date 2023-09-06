@@ -36,7 +36,7 @@ After having downloaded the IDAT files from EGA, you can use the we use the [met
 Install the package following the installation guide on their website, then run the following command,
 
 ```
-python -m methylprep process -d {path/to/directory/with/IDAT/files} --minfi -s {path/to/sample/sheet} --batch_size 50 -a
+python -m methylprep process -d {path/to/directory/with/IDAT/files} -s {path/to/sample/sheet} --batch_size 50 -a
 ```
 
 This will process the IDAT files and create .pkl files associated with these files, that will be the input for the analysis.
@@ -51,7 +51,13 @@ Although you can do this whichever way you prefer, we used Snakemake wrappers to
 
 We have uploaded to this repository the Snakefile used to run the analysis. First, install Snakemake according to the [instructions in their documentation](https://snakemake.readthedocs.io/en/stable/getting_started/installation.html). Wrappers must be downloaded from [The Snakemake Wrappers repository](https://snakemake-wrappers.readthedocs.io/en/stable/index.html). 
 
-Then, run snakemake in the folder that contains also the raw FASTQ files and the necessary Snakemake wrappers. You might have to adapt the file paths in the Snakefile we provided to match the names of your files. 
+Then, put the Snakefile in the folder that contains also the raw FASTQ files and the necessary Snakemake wrappers. Run the following command in the folder containing the Snakefile:
+
+```
+snakemake --use-conda --cores <n-cores> 
+```
+
+You might have to adapt the file paths in the Snakefile we provided to match the names of your files. 
 
 #### External data
 For external methylation datasets, as for in-house data, we use the [methylprep package](https://life-epigenetics-methylprep.readthedocs-hosted.com/en/latest/). 
@@ -61,15 +67,6 @@ Install the package following the installation guide on their website, then run 
 ```
 python -m methylprep -v download -i {GEOID} -d "path/to/save/methylprep_GSE132804" --batch_size 50
 ```
-
-For the external gene expression data, GSE76987, navigate to [this link](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE76987) and download the following files
-
-```
-GSE76987_ColonCancerProcessed.csv
-GSE76987_RightCancerProcessed.csv
-```
-
-Save these files in the directory of your choice.
 
 
 #### 1. `GeneralDatasetCharacteristics.ipynb`
@@ -206,7 +203,7 @@ This notebook computes the link between aDVMC methylation and clinical and lifes
 
 #### 11. `adVMPLinkGEX.ipynb`
 
-This notebook computes the analysis of aDVMC-related genes in terms of gene expression in an external dataset, as shown in Fig 3e and 3f, and Suppl. Fig S12.
+This notebook computes the analysis of aDVMC-related genes in terms of gene expression in a paired dataset of 84 patients from SWEPIC1, as shown in Fig 3e and 3f, and Suppl. Fig S12.
 
 ##### Placeholders
 
