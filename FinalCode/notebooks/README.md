@@ -201,7 +201,7 @@ This notebook computes the link between aDVMC methylation and clinical and lifes
 - base_dir4 = pl.Path("/add/path/here/"); the folder where the processed DNAmeth data for SWEPIC3 (see 0. Download the data) is stored.
 - data_dir = pl.Path("/add/path/here/"); the folder where the clinical and auxiliary data (see 0. Download the data) is stored.
 
-#### 11. `adVMPLinkGEX.ipynb`
+#### 11. `InhouseMethVsGex.ipynb`
 
 This notebook computes the analysis of aDVMC-related genes in terms of gene expression in a paired dataset of 84 patients from SWEPIC1, as shown in Fig 3e and 3f, and Suppl. Fig S12.
 
