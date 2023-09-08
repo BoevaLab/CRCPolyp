@@ -23,8 +23,8 @@ The DNA methylation and RNA seq raw data (IDAT and FASTQ files) have been deposi
 The Zenodo repository contains all input files and intermediate files of
 the analysis, other than the DNA methylation data/RNAseq data, as well as a file describing the content of the files in detail.
 
-Zenodo link: [XXXXX] # TODO
-EGA link: [XXXXX] # TODO
+- Zenodo link: [repository](https://doi.org/10.5281/zenodo.8320030)
+- EGA link: [XXXXX] # TODO
 
 > **_NOTE_**: Data downloaded from the Zenodo link is then used as is using the `data_dir` argument in all notebooks. Keep the architecture of the directory intact to be able to run the notebooks without issues.
 
