@@ -1,5 +1,5 @@
 # CRCPolyp
-Supporting code for "DNA methylation variability in cecal mucosa of patients with tubular adenomas as a marker of early field cancerization"
+Supporting code for "DNA-methylation variability in normal mucosa: a field cancerization marker in patients with adenomatous polyps" [1]
 
 ## Installing packages to reproduce analysis
 
@@ -41,7 +41,7 @@ Any questions on the analysis or the code can be addressed to josephine.yates@in
 
 ## References
 
-TBD
+[1] Josephine Yates, Helen Schaufelberger, Roland Steinacher, Primo Schär, Kaspar Truninger, Valentina Boeva, DNA-methylation variability in normal mucosa: a field cancerization marker in patients with adenomatous polyps, JNCI: Journal of the National Cancer Institute, 2024;, djae016, https://doi.org/10.1093/jnci/djae016
 
 
 
